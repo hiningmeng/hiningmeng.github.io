@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>K8s Traefik Ingress</title>
+      <title>k8s Ingress实战- traefik</title>
       <link>http://www.hiningmeng.cn/post/k8s-traefik-ingress/</link>
       <pubDate>Fri, 06 Dec 2019 17:14:03 +0800</pubDate>
       
@@ -21,7 +21,7 @@
     </item>
     
     <item>
-      <title>K8s Kong Ingress</title>
+      <title>k8s Ingress实战 - Kong</title>
       <link>http://www.hiningmeng.cn/post/k8s-kong-ingress/</link>
       <pubDate>Fri, 06 Dec 2019 17:13:52 +0800</pubDate>
       
