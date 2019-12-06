@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 17:14:03 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 17:28:22 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>K8s Log Aliyun</title>
+      <link>http://www.hiningmeng.cn/post/k8s-log-aliyun/</link>
+      <pubDate>Fri, 06 Dec 2019 17:28:22 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-log-aliyun/</guid>
+      <description>安装traefik 可以直接使用helm安装，参考：K8S-Traefik Ingress实战 打开traefik日志功能 默认在helm安装的va</description>
+    </item>
     
     <item>
       <title>k8s Ingress实战 - traefik</title>
