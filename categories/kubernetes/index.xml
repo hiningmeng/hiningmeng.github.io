@@ -6,10 +6,28 @@
     <description>Recent content in kubernetes on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 15:43:19 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 16:33:58 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>K8s Jenkins Cicd 1</title>
+      <link>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</link>
+      <pubDate>Fri, 06 Dec 2019 16:33:58 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</guid>
+      <description>Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选</description>
+    </item>
+    
+    <item>
+      <title>k8s下使用Jenkins实现CICD(二)</title>
+      <link>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-2/</link>
+      <pubDate>Fri, 06 Dec 2019 16:32:24 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-2/</guid>
+      <description>Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选</description>
+    </item>
     
     <item>
       <title>Centos7下通过kubeadm安装kubernetes-v1.14.2</title>

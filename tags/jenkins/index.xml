@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 徐柠檬的博客</title>
-    <link>http://www.hiningmeng.cn/post/</link>
-    <description>Recent content in Posts on 徐柠檬的博客</description>
+    <title>jenkins on 徐柠檬的博客</title>
+    <link>http://www.hiningmeng.cn/tags/jenkins/</link>
+    <description>Recent content in jenkins on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 06 Dec 2019 16:33:58 +0800</lastBuildDate>
     
-	<atom:link href="http://www.hiningmeng.cn/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.hiningmeng.cn/tags/jenkins/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -27,15 +27,6 @@
       
       <guid>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-2/</guid>
       <description>Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选</description>
-    </item>
-    
-    <item>
-      <title>Centos7下通过kubeadm安装kubernetes-v1.14.2</title>
-      <link>http://www.hiningmeng.cn/post/k8s-install-centos/</link>
-      <pubDate>Fri, 06 Dec 2019 15:43:19 +0800</pubDate>
-      
-      <guid>http://www.hiningmeng.cn/post/k8s-install-centos/</guid>
-      <description>本文使用的K8S版本已经不是最新，仅供参考。 添加hosts文件 echo &amp;quot;10.40.0.201 hiningmeng-k8s1 10.40.0.202 hiningmeng-k8s2 10.40.0.203 hiningmeng-k8s3 10.40.0.204 hiningmeng-k8s4 &amp;quot; &amp;gt;&amp;gt; /etc/hosts 关闭防火墙、selinux sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/g&#39; /etc/selinux/config setenforce 0 systemctl disable firewalld.service systemctl stop firewalld.service 配置</description>
     </item>
     
   </channel>

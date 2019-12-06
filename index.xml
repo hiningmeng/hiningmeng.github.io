@@ -6,10 +6,264 @@
     <description>Recent content on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 15:43:19 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 16:33:58 +0800</lastBuildDate>
     
         <atom:link href="http://www.hiningmeng.cn/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>K8s Jenkins Cicd 1</title>
+      <link>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</link>
+      <pubDate>Fri, 06 Dec 2019 16:33:58 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-082206.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jenkins&#34;&gt;Jenkins安装&lt;/h4&gt;
+&lt;p&gt;参考前一篇文章我们安装好Jenkins的master节点: &lt;a href=&#34;https://mp.weixin.qq.com/s/2pwJhlkjly8VUEFFMWndYQ&#34;&gt;K8S结合Jenkins实现持续集成（一）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;安装是的插件我们可以选择推荐安装即可，后面单独安装需要的插件。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-032036.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jenkins1&#34;&gt;Jenkins配置&lt;/h4&gt;
+&lt;p&gt;系统管理 &amp;ndash;&amp;gt; 插件管理  &amp;ndash;&amp;gt; available，安装需要的插件，有的插件下载不下来可以去官网下载之后上传安装。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes&lt;/li&gt;
+&lt;li&gt;pipeline&lt;/li&gt;
+&lt;li&gt;Git Parameter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;kubernetes&#34;&gt;配置Kubernetes云信息&lt;/h5&gt;
+&lt;p&gt;在系统管理 &amp;ndash;&amp;gt; 系统设置 ，最后面有个Cloud设置，Add a new cloud
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-062108.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;添加具体的Kubernetes信息，K8S服务器可以是Jenkins本身所在的服务器，也可以是其他集群(需要配置证书)，这里以本身所在集群为例。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;名称 ：用于pipeline调用云名称&lt;/li&gt;
+&lt;li&gt;Kubernetes地址：可以通过kubectl cluster-info命令获取&lt;/li&gt;
+&lt;li&gt;Kubernetes 服务证书 key：本身所在的集群因为我们通过sa所以不需要&lt;/li&gt;
+&lt;li&gt;Kubernetes 命名空间：Jenkins的nodePod节点启动的namespace&lt;/li&gt;
+&lt;li&gt;Jenkins 地址：主节点8080端口通过nodeport暴露出来的，地址:端口&lt;/li&gt;
+&lt;li&gt;Jenkins 通道：主节点50000端口通过nodeport暴露出来的，地址:端口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-063328.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h5 id=&#34;pipeline&#34;&gt;创建pipeline任务&lt;/h5&gt;
+&lt;p&gt;选择新建任务，构建流水线。
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-070739.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;安装了Git Parameter插件之后，可以进行分支的选择，需要进行参数化构建，这个可以在页面设置，也可以放到pipeline里面，这边直接在页面配置参数。
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-073433.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其中Use repository如果不设置，后面的Pipeline from SCRM的时候，就会取不到分支；&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;指定pipeline地址，可以直接在页面写，做好是通过Git的方式管理。
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-073905.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Git管理Pipeline的Jenkinsfile文件，需要提供证书拉取
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-074525.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h5 id=&#34;jenkinsfile&#34;&gt;编写Jenkinsfile文件&lt;/h5&gt;
+&lt;pre&gt;&lt;code&gt;#定义参数label，K8S启动的pod名称通过这个来制定
+def label = &amp;quot;JenkinsPOD-${UUID.randomUUID().toString()}&amp;quot; 
+#定义jenkins的工作目录
+def jenworkspace=&amp;quot;/home/jenkins/workspace/${params.PROJECT}&amp;quot;
+#maven项目缓存，提供编译速度
+def mvnrepo=&amp;quot;/tmp/repository&amp;quot;
+#kubectl和docker执行文件，这个可以打到镜像里面，这边直接共享的方式提供
+def sharefile=&amp;quot;/tmp/sharefile&amp;quot;
+#deployment等K8S的yaml文件目录
+def k8srepo=&#39;/tmp/k8s_repos&#39;
+
+#cloud为我们前面提供的云名称，nodeSelector是K8S运行pod的节点选择
+podTemplate(label: label, cloud: &#39;kubernetes-hiningmeng&#39;,nodeSelector: &#39;devops.k8s.icjl/jenkins=jnlp&#39;,
+    containers: [
+        containerTemplate(
+            name: &#39;jnlp&#39;,
+            image: &#39;registry-vpc.cn-hangzhou.aliyuncs.com/hiningmeng/jnlp:v1&#39;,
+            ttyEnabled: true,
+            alwaysPullImage: false),
+        containerTemplate(
+            name: &#39;jnlp-maven&#39;,
+            image: &#39;jenkins/jnlp-agent-maven&#39;,
+            //image:&#39;ungerts/jnlp-agent-maven&#39;,
+            ttyEnabled: true,
+            alwaysPullImage: false,
+            command: &#39;cat&#39;)
+    ],
+    volumes: [
+        hostPathVolume(hostPath: &#39;/var/run/docker.sock&#39;, mountPath:&#39;/var/run/docker.sock&#39;),
+        persistentVolumeClaim(mountPath: &amp;quot;$mvnrepo&amp;quot;, claimName: &#39;maven-repo-pvc&#39;, readOnly: false),
+        persistentVolumeClaim(mountPath: &amp;quot;$sharefile&amp;quot;, claimName: &#39;sharefile-repo-pvc&#39;, readOnly: false),
+    ]
+)
+{
+    
+    node (label) {
+        stage(&#39;Hello World&#39;){
+            container(&#39;jnlp&#39;){
+                echo &amp;quot;hello, world&amp;quot;
+                sh &amp;quot;ln -s $sharefile/kubectl  /usr/bin/kubectl&amp;quot;
+                sh &amp;quot;ln -s $sharefile/docker /usr/bin/docker&amp;quot;
+
+            }
+        }
+        stage(&#39;Git Pull&#39;){
+            dir(&amp;quot;$jenworkspace&amp;quot;){
+                git branch: &amp;quot;${params.BRANCH}&amp;quot;, changelog: false, credentialsId: &#39;jenkins-pull-key&#39;, poll: false, url: &amp;quot;${params.CODE_URL}&amp;quot;
+            }
+        }
+        stage(&#39;Mvn Package&#39;){
+            container(&#39;jnlp-maven&#39;){
+                dir(&amp;quot;$jenworkspace&amp;quot;){    
+                    sh &amp;quot;mvn clean install -Dmaven.test.skip=true  -U  -s  $sharefile/settings.xml&amp;quot;
+                }
+            }                
+        }
+        stage(&#39;Docker build&#39;){
+            ...
+        }
+        stage(&#39;K8S Deploy&#39;){
+            ...
+        }
+    }
+}
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;具体的脚本还是自己摸索一下，不同的项目定制即可，大体的架子如上面的实例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;heading&#34;&gt;构建项目&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-074443.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;任务一次都没构建的时候会出现报错，构建一次就没问题了；&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-080954.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果一切正常的话,在K8S的devops命名空间会创建出新的POD
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-081238.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;至此，简单的可伸缩的基于K8S的Jenkins就完成了，如有问题欢迎交流。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>k8s下使用Jenkins实现CICD(二)</title>
+      <link>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-2/</link>
+      <pubDate>Fri, 06 Dec 2019 16:32:24 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-2/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-082206.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jenkins&#34;&gt;Jenkins安装&lt;/h4&gt;
+&lt;p&gt;参考前一篇文章我们安装好Jenkins的master节点: &lt;a href=&#34;https://mp.weixin.qq.com/s/2pwJhlkjly8VUEFFMWndYQ&#34;&gt;K8S结合Jenkins实现持续集成（一）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;安装是的插件我们可以选择推荐安装即可，后面单独安装需要的插件。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-032036.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jenkins1&#34;&gt;Jenkins配置&lt;/h4&gt;
+&lt;p&gt;系统管理 &amp;ndash;&amp;gt; 插件管理  &amp;ndash;&amp;gt; available，安装需要的插件，有的插件下载不下来可以去官网下载之后上传安装。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes&lt;/li&gt;
+&lt;li&gt;pipeline&lt;/li&gt;
+&lt;li&gt;Git Parameter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;kubernetes&#34;&gt;配置Kubernetes云信息&lt;/h5&gt;
+&lt;p&gt;在系统管理 &amp;ndash;&amp;gt; 系统设置 ，最后面有个Cloud设置，Add a new cloud
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-062108.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;添加具体的Kubernetes信息，K8S服务器可以是Jenkins本身所在的服务器，也可以是其他集群(需要配置证书)，这里以本身所在集群为例。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;名称 ：用于pipeline调用云名称&lt;/li&gt;
+&lt;li&gt;Kubernetes地址：可以通过kubectl cluster-info命令获取&lt;/li&gt;
+&lt;li&gt;Kubernetes 服务证书 key：本身所在的集群因为我们通过sa所以不需要&lt;/li&gt;
+&lt;li&gt;Kubernetes 命名空间：Jenkins的nodePod节点启动的namespace&lt;/li&gt;
+&lt;li&gt;Jenkins 地址：主节点8080端口通过nodeport暴露出来的，地址:端口&lt;/li&gt;
+&lt;li&gt;Jenkins 通道：主节点50000端口通过nodeport暴露出来的，地址:端口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-063328.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h5 id=&#34;pipeline&#34;&gt;创建pipeline任务&lt;/h5&gt;
+&lt;p&gt;选择新建任务，构建流水线。
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-070739.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;安装了Git Parameter插件之后，可以进行分支的选择，需要进行参数化构建，这个可以在页面设置，也可以放到pipeline里面，这边直接在页面配置参数。
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-073433.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其中Use repository如果不设置，后面的Pipeline from SCRM的时候，就会取不到分支；&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;指定pipeline地址，可以直接在页面写，做好是通过Git的方式管理。
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-073905.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Git管理Pipeline的Jenkinsfile文件，需要提供证书拉取
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-074525.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h5 id=&#34;jenkinsfile&#34;&gt;编写Jenkinsfile文件&lt;/h5&gt;
+&lt;pre&gt;&lt;code&gt;#定义参数label，K8S启动的pod名称通过这个来制定
+def label = &amp;quot;JenkinsPOD-${UUID.randomUUID().toString()}&amp;quot;
+#定义jenkins的工作目录
+def jenworkspace=&amp;quot;/home/jenkins/workspace/${params.PROJECT}&amp;quot;
+#maven项目缓存，提供编译速度
+def mvnrepo=&amp;quot;/tmp/repository&amp;quot;
+#kubectl和docker执行文件，这个可以打到镜像里面，这边直接共享的方式提供
+def sharefile=&amp;quot;/tmp/sharefile&amp;quot;
+#deployment等K8S的yaml文件目录
+def k8srepo=&#39;/tmp/k8s_repos&#39;
+
+#cloud为我们前面提供的云名称，nodeSelector是K8S运行pod的节点选择
+podTemplate(label: label, cloud: &#39;kubernetes-hiningmeng&#39;,nodeSelector: &#39;devops.k8s.icjl/jenkins=jnlp&#39;,
+    containers: [
+        containerTemplate(
+            name: &#39;jnlp&#39;,
+            image: &#39;registry-vpc.cn-hangzhou.aliyuncs.com/hiningmeng/jnlp:v1&#39;,
+            ttyEnabled: true,
+            alwaysPullImage: false),
+        containerTemplate(
+            name: &#39;jnlp-maven&#39;,
+            image: &#39;jenkins/jnlp-agent-maven&#39;,
+            //image:&#39;ungerts/jnlp-agent-maven&#39;,
+            ttyEnabled: true,
+            alwaysPullImage: false,
+            command: &#39;cat&#39;)
+    ],
+    volumes: [
+        hostPathVolume(hostPath: &#39;/var/run/docker.sock&#39;, mountPath:&#39;/var/run/docker.sock&#39;),
+        persistentVolumeClaim(mountPath: &amp;quot;$mvnrepo&amp;quot;, claimName: &#39;maven-repo-pvc&#39;, readOnly: false),
+        persistentVolumeClaim(mountPath: &amp;quot;$sharefile&amp;quot;, claimName: &#39;sharefile-repo-pvc&#39;, readOnly: false),
+    ]
+)
+{
+
+    node (label) {
+        stage(&#39;Hello World&#39;){
+            container(&#39;jnlp&#39;){
+                echo &amp;quot;hello, world&amp;quot;
+                sh &amp;quot;ln -s $sharefile/kubectl  /usr/bin/kubectl&amp;quot;
+                sh &amp;quot;ln -s $sharefile/docker /usr/bin/docker&amp;quot;
+
+            }
+        }
+        stage(&#39;Git Pull&#39;){
+            dir(&amp;quot;$jenworkspace&amp;quot;){
+                git branch: &amp;quot;${params.BRANCH}&amp;quot;, changelog: false, credentialsId: &#39;jenkins-pull-key&#39;, poll: false, url: &amp;quot;${params.CODE_URL}&amp;quot;
+            }
+        }
+        stage(&#39;Mvn Package&#39;){
+            container(&#39;jnlp-maven&#39;){
+                dir(&amp;quot;$jenworkspace&amp;quot;){
+                    sh &amp;quot;mvn clean install -Dmaven.test.skip=true  -U  -s  $sharefile/settings.xml&amp;quot;
+                }
+            }
+        }
+        stage(&#39;Docker build&#39;){
+            ...
+        }
+        stage(&#39;K8S Deploy&#39;){
+            ...
+        }
+    }
+}
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;具体的脚本还是自己摸索一下，不同的项目定制即可，大体的架子如上面的实例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;heading&#34;&gt;构建项目&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-074443.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;任务一次都没构建的时候会出现报错，构建一次就没问题了；&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-080954.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果一切正常的话,在K8S的devops命名空间会创建出新的POD
+&lt;img src=&#34;http://img.hixuxu.com/2019-10-21-081238.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;至此，简单的可伸缩的基于K8S的Jenkins就完成了，如有问题欢迎交流。&lt;/p&gt;
+</description>
+      
+    </item>
     
     <item>
       <title>Centos7下通过kubeadm安装kubernetes-v1.14.2</title>
