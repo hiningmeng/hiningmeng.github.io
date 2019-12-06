@@ -18,7 +18,9 @@
       
       <guid>http://www.hiningmeng.cn/post/k8s-install-centos/</guid>
       
-        <description>&lt;h3 id=&#34;hosts&#34;&gt;添加hosts文件&lt;/h3&gt;
+        <description>&lt;p&gt;本文使用的K8S版本已经不是最新，仅供参考。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://img.hixuxu.com/2019-12-06-080028.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;hosts&#34;&gt;添加hosts文件&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;echo &amp;quot;10.40.0.201 hiningmeng-k8s1
 10.40.0.202 hiningmeng-k8s2
 10.40.0.203 hiningmeng-k8s3
