@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 徐柠檬的博客</title>
+    <link>http://www.hiningmeng.cn/post/</link>
+    <description>Recent content in Posts on 徐柠檬的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 06 Dec 2019 15:43:19 +0800</lastBuildDate>
+    
+	<atom:link href="http://www.hiningmeng.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Centos7下通过kubeadm安装kubernetes-v1.14.2</title>
+      <link>http://www.hiningmeng.cn/post/k8s-install-centos/</link>
+      <pubDate>Fri, 06 Dec 2019 15:43:19 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-install-centos/</guid>
+      <description>添加hosts文件 echo &amp;quot;10.40.0.201 hiningmeng-k8s1 10.40.0.202 hiningmeng-k8s2 10.40.0.203 hiningmeng-k8s3 10.40.0.204 hiningmeng-k8s4 &amp;quot; &amp;gt;&amp;gt; /etc/hosts 关闭防火墙、selinux sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/g&#39; /etc/selinux/config setenforce 0 systemctl disable firewalld.service systemctl stop firewalld.service 配置net.bridge modprobe br_netfilter echo &amp;quot;net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf sysctl</description>
+    </item>
+    
+  </channel>
+</rss>

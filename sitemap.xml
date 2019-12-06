@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.hiningmeng.cn/post/k8s-install-centos/</loc>
+    <lastmod>2019-12-06T15:43:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/post/</loc>
+    <lastmod>2019-12-06T15:43:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/</loc>
+    <lastmod>2019-12-06T15:43:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://www.hiningmeng.cn/categories/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -9,12 +30,6 @@
   
   <url>
     <loc>http://www.hiningmeng.cn/tags/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.hiningmeng.cn/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
