@@ -23,10 +23,9 @@
 &lt;!-- raw HTML omitted --&gt;
 &lt;h3 id=&#34;hosts&#34;&gt;添加hosts文件&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;echo &amp;quot;10.40.0.201 hiningmeng-k8s1
-10.40.0.202 hiningmeng-k8s2
-10.40.0.203 hiningmeng-k8s3
-10.40.0.204 hiningmeng-k8s4
-
+      10.40.0.202 hiningmeng-k8s2
+      10.40.0.203 hiningmeng-k8s3
+      10.40.0.204 hiningmeng-k8s4
 &amp;quot; &amp;gt;&amp;gt; /etc/hosts
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;selinux&#34;&gt;关闭防火墙、selinux&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/g&#39; /etc/selinux/config
