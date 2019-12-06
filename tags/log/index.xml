@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>k8s的traefik日志收集到阿里云日志服务</title>
+      <title>k8s下traefik日志收集到阿里云日志服务</title>
       <link>http://www.hiningmeng.cn/post/k8s-log-aliyun/</link>
       <pubDate>Fri, 06 Dec 2019 17:28:22 +0800</pubDate>
       

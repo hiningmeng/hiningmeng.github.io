@@ -6,13 +6,22 @@
     <description>Recent content in kubernetes on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 17:28:22 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 17:50:21 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>k8s的traefik日志收集到阿里云日志服务</title>
+      <title>k8s下RocketMQ实战</title>
+      <link>http://www.hiningmeng.cn/post/k8s-rocketmq-install/</link>
+      <pubDate>Fri, 06 Dec 2019 17:50:21 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-rocketmq-install/</guid>
+      <description>RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。 RocketMQ的部署方式有多种： 2</description>
+    </item>
+    
+    <item>
+      <title>k8s下traefik日志收集到阿里云日志服务</title>
       <link>http://www.hiningmeng.cn/post/k8s-log-aliyun/</link>
       <pubDate>Fri, 06 Dec 2019 17:28:22 +0800</pubDate>
       

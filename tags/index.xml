@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 17:28:22 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 17:50:21 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>k8s</title>
+      <link>http://www.hiningmeng.cn/tags/k8s/</link>
+      <pubDate>Fri, 06 Dec 2019 17:50:21 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rocketmq</title>
+      <link>http://www.hiningmeng.cn/tags/rocketmq/</link>
+      <pubDate>Fri, 06 Dec 2019 17:50:21 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/tags/rocketmq/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>aliyun</title>
@@ -17,15 +35,6 @@
       <pubDate>Fri, 06 Dec 2019 17:28:22 +0800</pubDate>
       
       <guid>http://www.hiningmeng.cn/tags/aliyun/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>k8s</title>
-      <link>http://www.hiningmeng.cn/tags/k8s/</link>
-      <pubDate>Fri, 06 Dec 2019 17:28:22 +0800</pubDate>
-      
-      <guid>http://www.hiningmeng.cn/tags/k8s/</guid>
       <description></description>
     </item>
     
