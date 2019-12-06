@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: http://blog.hiningmeng.cn/sitemap.xml
+Sitemap: http://www.hiningmeng.cn/sitemap.xml

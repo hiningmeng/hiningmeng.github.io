@@ -1,20 +1,20 @@
-<?xml-stylesheet type="text/xsl" href="http://blog.hiningmeng.cn/sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="http://www.hiningmeng.cn/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.hiningmeng.cn/categories/</loc>
+    <loc>http://www.hiningmeng.cn/categories/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://blog.hiningmeng.cn/tags/</loc>
+    <loc>http://www.hiningmeng.cn/tags/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://blog.hiningmeng.cn/</loc>
+    <loc>http://www.hiningmeng.cn/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
