@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>K8s Jenkins Cicd 1 - 徐柠檬的博客</title>
+  <title>k8s下使用Jenkins实现CICD(一) - 徐柠檬的博客</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="hiningmeng" />
-  <meta name="description" content="Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选" />
+  <meta name="description" content="关于搭建Kubernetes环境可以参考我前面的公众号文章：Centos7下使用kubeadm搭建Kubernetes-v1.14.2，本篇" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -59,23 +59,23 @@
 
 
 
-<meta property="og:title" content="K8s Jenkins Cicd 1" />
-<meta property="og:description" content="Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选" />
+<meta property="og:title" content="k8s下使用Jenkins实现CICD(一)" />
+<meta property="og:description" content="关于搭建Kubernetes环境可以参考我前面的公众号文章：Centos7下使用kubeadm搭建Kubernetes-v1.14.2，本篇" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/" />
 <meta property="article:published_time" content="2019-12-06T16:33:58+08:00" />
 <meta property="article:modified_time" content="2019-12-06T16:33:58+08:00" />
-<meta itemprop="name" content="K8s Jenkins Cicd 1">
-<meta itemprop="description" content="Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选">
+<meta itemprop="name" content="k8s下使用Jenkins实现CICD(一)">
+<meta itemprop="description" content="关于搭建Kubernetes环境可以参考我前面的公众号文章：Centos7下使用kubeadm搭建Kubernetes-v1.14.2，本篇">
 <meta itemprop="datePublished" content="2019-12-06T16:33:58&#43;08:00" />
 <meta itemprop="dateModified" content="2019-12-06T16:33:58&#43;08:00" />
-<meta itemprop="wordCount" content="1131">
+<meta itemprop="wordCount" content="959">
 
 
 
 <meta itemprop="keywords" content="k8s,jenkins," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="K8s Jenkins Cicd 1"/>
-<meta name="twitter:description" content="Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选"/>
+<meta name="twitter:title" content="k8s下使用Jenkins实现CICD(一)"/>
+<meta name="twitter:description" content="关于搭建Kubernetes环境可以参考我前面的公众号文章：Centos7下使用kubeadm搭建Kubernetes-v1.14.2，本篇"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -277,7 +277,7 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">K8s Jenkins Cicd 1</h1>
+      <h1 class="post-title">k8s下使用Jenkins实现CICD(一)</h1>
       
       <div class="post-meta">
         <time datetime="2019-12-06" class="post-time">
@@ -310,7 +310,7 @@
   <ul>
     <li>
       <ul>
-        <li></li>
+        <li><a href="#jenkinsk8s">安装Jenkins服务到K8S集群</a></li>
       </ul>
     </li>
   </ul>
@@ -320,122 +320,166 @@
 
     
     <div class="post-content">
-      <p><img src="http://img.hixuxu.com/2019-10-21-082206.jpg" alt=""></p>
-<h4 id="jenkins">Jenkins安装</h4>
-<p>参考前一篇文章我们安装好Jenkins的master节点: <a href="https://mp.weixin.qq.com/s/2pwJhlkjly8VUEFFMWndYQ">K8S结合Jenkins实现持续集成（一）</a></p>
-<p>安装是的插件我们可以选择推荐安装即可，后面单独安装需要的插件。</p>
-<p><img src="http://img.hixuxu.com/2019-10-21-032036.png" alt=""></p>
-<h4 id="jenkins1">Jenkins配置</h4>
-<p>系统管理 &ndash;&gt; 插件管理  &ndash;&gt; available，安装需要的插件，有的插件下载不下来可以去官网下载之后上传安装。</p>
-<ul>
-<li>Kubernetes</li>
-<li>pipeline</li>
-<li>Git Parameter</li>
-</ul>
-<h5 id="kubernetes">配置Kubernetes云信息</h5>
-<p>在系统管理 &ndash;&gt; 系统设置 ，最后面有个Cloud设置，Add a new cloud
-<img src="http://img.hixuxu.com/2019-10-21-062108.png" alt=""></p>
-<p>添加具体的Kubernetes信息，K8S服务器可以是Jenkins本身所在的服务器，也可以是其他集群(需要配置证书)，这里以本身所在集群为例。</p>
-<ul>
-<li>名称 ：用于pipeline调用云名称</li>
-<li>Kubernetes地址：可以通过kubectl cluster-info命令获取</li>
-<li>Kubernetes 服务证书 key：本身所在的集群因为我们通过sa所以不需要</li>
-<li>Kubernetes 命名空间：Jenkins的nodePod节点启动的namespace</li>
-<li>Jenkins 地址：主节点8080端口通过nodeport暴露出来的，地址:端口</li>
-<li>Jenkins 通道：主节点50000端口通过nodeport暴露出来的，地址:端口</li>
-</ul>
-<p><img src="http://img.hixuxu.com/2019-10-21-063328.png" alt=""></p>
-<h5 id="pipeline">创建pipeline任务</h5>
-<p>选择新建任务，构建流水线。
-<img src="http://img.hixuxu.com/2019-10-21-070739.png" alt=""></p>
-<p>安装了Git Parameter插件之后，可以进行分支的选择，需要进行参数化构建，这个可以在页面设置，也可以放到pipeline里面，这边直接在页面配置参数。
-<img src="http://img.hixuxu.com/2019-10-21-073433.png" alt=""></p>
-<blockquote>
-<p>其中Use repository如果不设置，后面的Pipeline from SCRM的时候，就会取不到分支；</p>
-</blockquote>
-<p>指定pipeline地址，可以直接在页面写，做好是通过Git的方式管理。
-<img src="http://img.hixuxu.com/2019-10-21-073905.png" alt=""></p>
-<p>Git管理Pipeline的Jenkinsfile文件，需要提供证书拉取
-<img src="http://img.hixuxu.com/2019-10-21-074525.png" alt=""></p>
-<h5 id="jenkinsfile">编写Jenkinsfile文件</h5>
-<pre><code>#定义参数label，K8S启动的pod名称通过这个来制定
-def label = &quot;JenkinsPOD-${UUID.randomUUID().toString()}&quot; 
-#定义jenkins的工作目录
-def jenworkspace=&quot;/home/jenkins/workspace/${params.PROJECT}&quot;
-#maven项目缓存，提供编译速度
-def mvnrepo=&quot;/tmp/repository&quot;
-#kubectl和docker执行文件，这个可以打到镜像里面，这边直接共享的方式提供
-def sharefile=&quot;/tmp/sharefile&quot;
-#deployment等K8S的yaml文件目录
-def k8srepo='/tmp/k8s_repos'
+      <p>关于搭建Kubernetes环境可以参考我前面的公众号文章：<strong>Centos7下使用kubeadm搭建Kubernetes-v1.14.2</strong>，本篇文章主要实现Jenkins在k8s集群的安装、slave节点在k8s内自动创建销毁，通过pipeline实现java项目的持续集成发布。</p>
+<h3 id="jenkinsk8s">安装Jenkins服务到K8S集群</h3>
+<h4 id="dockerfilejenkins">使用Dockerfile制作Jenkins镜像</h4>
+<p>下载war包进行的安装，Dockerfile如下，war包下载地址：https://jenkins.io/zh/download</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> java:8</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> echo <span style="color:#e6db74">&#39;hello docker, start build image&#39;</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir -p /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> echo <span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> &gt; /etc/timezone<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> jenkins.war .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;java&#34;</span> ,<span style="color:#e6db74">&#34;-Xms1024m&#34;</span>,<span style="color:#e6db74">&#34;-Xmx1024m&#34;</span>, <span style="color:#e6db74">&#34;-jar&#34;</span>,<span style="color:#e6db74">&#34;/app/jenkins.war&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>制作镜像</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker build -t registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:2.176.2  .
 
-#cloud为我们前面提供的云名称，nodeSelector是K8S运行pod的节点选择
-podTemplate(label: label, cloud: 'kubernetes-hiningmeng',nodeSelector: 'devops.k8s.icjl/jenkins=jnlp',
-    containers: [
-        containerTemplate(
-            name: 'jnlp',
-            image: 'registry-vpc.cn-hangzhou.aliyuncs.com/hiningmeng/jnlp:v1',
-            ttyEnabled: true,
-            alwaysPullImage: false),
-        containerTemplate(
-            name: 'jnlp-maven',
-            image: 'jenkins/jnlp-agent-maven',
-            //image:'ungerts/jnlp-agent-maven',
-            ttyEnabled: true,
-            alwaysPullImage: false,
-            command: 'cat')
-    ],
-    volumes: [
-        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath:'/var/run/docker.sock'),
-        persistentVolumeClaim(mountPath: &quot;$mvnrepo&quot;, claimName: 'maven-repo-pvc', readOnly: false),
-        persistentVolumeClaim(mountPath: &quot;$sharefile&quot;, claimName: 'sharefile-repo-pvc', readOnly: false),
-    ]
-)
-{
-    
-    node (label) {
-        stage('Hello World'){
-            container('jnlp'){
-                echo &quot;hello, world&quot;
-                sh &quot;ln -s $sharefile/kubectl  /usr/bin/kubectl&quot;
-                sh &quot;ln -s $sharefile/docker /usr/bin/docker&quot;
+docker push registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:2.176.2
 
-            }
-        }
-        stage('Git Pull'){
-            dir(&quot;$jenworkspace&quot;){
-                git branch: &quot;${params.BRANCH}&quot;, changelog: false, credentialsId: 'jenkins-pull-key', poll: false, url: &quot;${params.CODE_URL}&quot;
-            }
-        }
-        stage('Mvn Package'){
-            container('jnlp-maven'){
-                dir(&quot;$jenworkspace&quot;){    
-                    sh &quot;mvn clean install -Dmaven.test.skip=true  -U  -s  $sharefile/settings.xml&quot;
-                }
-            }                
-        }
-        stage('Docker build'){
-            ...
-        }
-        stage('K8S Deploy'){
-            ...
-        }
-    }
-}
-
-
-</code></pre><blockquote>
-<p>具体的脚本还是自己摸索一下，不同的项目定制即可，大体的架子如上面的实例</p>
-</blockquote>
-<h5 id="heading">构建项目</h5>
-<p><img src="http://img.hixuxu.com/2019-10-21-074443.png" alt=""></p>
-<blockquote>
-<p>任务一次都没构建的时候会出现报错，构建一次就没问题了；</p>
-</blockquote>
-<p><img src="http://img.hixuxu.com/2019-10-21-080954.png" alt=""></p>
-<p>如果一切正常的话,在K8S的devops命名空间会创建出新的POD
-<img src="http://img.hixuxu.com/2019-10-21-081238.png" alt=""></p>
-<p>至此，简单的可伸缩的基于K8S的Jenkins就完成了，如有问题欢迎交流。</p>
+</code></pre></div><h4 id="k8sjenkins">K8S安装Jenkins应用</h4>
+<p>在k8s集群内创建Jenkins工作的namespace，我这边统一放在devops这个ns底下；</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl create ns devops
+</code></pre></div><p>我这里把Jenkins工作目录单独挂载到PVC，需要先创建pv-pvc,挂载点是使用的nfs服务，请先创建好服务，jenkins-pv-pvc.yaml如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-home-pv
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: <span style="color:#ae81ff">192.168</span><span style="color:#ae81ff">.1</span><span style="color:#ae81ff">.100</span>
+    path: <span style="color:#e6db74">&#34;/data/jenkins_home&#34;</span>
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-home-pvc
+  namespace: devops
+spec:
+  accessModes: [<span style="color:#e6db74">&#34;ReadWriteMany&#34;</span>]
+  resources:
+    requests:
+      storage: 100Gi
+</code></pre></div><p>为Jenkins创建单独的ServiceAccount,这里的ClusterRole直接使用的cluster-admin,jenkins-serveraccount.yaml如下；</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: jenkins
+  name: jenkins-admin
+  namespace: devops
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: jenkins-admin
+  labels:
+    app: jenkins
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-admin
+    namespace: devops
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+</code></pre></div><p>编写Deployment文件,我使用到了node标签apps.k8s.icjl/devops，打标签的命令如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl label node your-node-name apps.k8s.icjl/devops<span style="color:#f92672">=</span>
+</code></pre></div><p>jenkins-deployment.yaml如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: devops
+  labels:
+    app: jenkins
+spec:
+  replicas: <span style="color:#ae81ff">1</span>
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins-admin
+      imagePullSecrets:
+        - name: ram-secret
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: apps.k8s.icjl/devops
+                operator: Exists
+      containers:
+      - name: jenkins
+        image: registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:<span style="color:#ae81ff">2.176</span><span style="color:#ae81ff">.2</span>
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /root/.jenkins
+          readOnly: <span style="color:#66d9ef">false</span>
+        ports:
+        - containerPort: <span style="color:#ae81ff">8080</span>
+        - containerPort: <span style="color:#ae81ff">50000</span>
+      volumes:
+      - name: jenkins-home
+        persistentVolumeClaim:
+          claimName: jenkins-home-pvc
+</code></pre></div><p>创建service，这边使用了NodePort,jenkins-service.yaml如下；</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jenkins
+  name: jenkins
+  namespace: devops
+  annotations:
+    prometheus.io/scrape: <span style="color:#e6db74">&#39;true&#39;</span>
+spec:
+  type: NodePort
+  ports:
+  - name: jenkins-web
+    port: <span style="color:#ae81ff">8080</span>
+    targetPort: <span style="color:#ae81ff">8080</span>
+    nodePort: <span style="color:#ae81ff">31442</span>
+  - name: jenkins-agent
+    port: <span style="color:#ae81ff">50000</span>
+    targetPort: <span style="color:#ae81ff">50000</span>
+    nodePort: <span style="color:#ae81ff">30005</span>
+  selector:
+    app: jenkins
+</code></pre></div><p>也可以使用ingress暴露的方式,jenkins-ingress.yaml如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins
+  labels:
+    name: jenkins
+  namespace: devops
+spec:
+  rules:
+  - host: jenkins.hiningmeng.cn
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jenkins
+          servicePort: <span style="color:#ae81ff">8080</span>
+</code></pre></div><p>执行</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> kubectl apply -f jenkins-pv-pvc.yaml
+ kubectl apply -f jenkins-serveraccount.yaml
+ kubectl apply -f jenkins-deployment.yaml
+ kubectl apply -f jenkins-service.yaml
+ kubectl apply -f jenkins-ingress.yaml
+</code></pre></div><p><img src="http://img.hixuxu.com/2019-08-06-065151.png" alt="image-20190806145150888"></p>
 
     </div>
 

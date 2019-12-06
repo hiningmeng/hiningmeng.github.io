@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>K8s Jenkins Cicd 1</title>
+      <title>k8s下使用Jenkins实现CICD(一)</title>
       <link>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</link>
       <pubDate>Fri, 06 Dec 2019 16:33:58 +0800</pubDate>
       
       <guid>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</guid>
-      <description>Jenkins安装 参考前一篇文章我们安装好Jenkins的master节点: K8S结合Jenkins实现持续集成（一） 安装是的插件我们可以选</description>
+      <description>关于搭建Kubernetes环境可以参考我前面的公众号文章：Centos7下使用kubeadm搭建Kubernetes-v1.14.2，本篇</description>
     </item>
     
     <item>
