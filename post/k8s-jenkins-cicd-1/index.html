@@ -69,7 +69,7 @@
 <meta itemprop="description" content="关于搭建Kubernetes环境可以参考我前面的公众号文章：Centos7下使用kubeadm搭建Kubernetes-v1.14.2，本篇">
 <meta itemprop="datePublished" content="2019-12-06T16:33:58&#43;08:00" />
 <meta itemprop="dateModified" content="2019-12-06T16:33:58&#43;08:00" />
-<meta itemprop="wordCount" content="959">
+<meta itemprop="wordCount" content="859">
 
 
 
@@ -324,162 +324,367 @@
 <h3 id="jenkinsk8s">安装Jenkins服务到K8S集群</h3>
 <h4 id="dockerfilejenkins">使用Dockerfile制作Jenkins镜像</h4>
 <p>下载war包进行的安装，Dockerfile如下，war包下载地址：https://jenkins.io/zh/download</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> java:8</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> echo <span style="color:#e6db74">&#39;hello docker, start build image&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir -p /app<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> echo <span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> &gt; /etc/timezone<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> jenkins.war .<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;java&#34;</span> ,<span style="color:#e6db74">&#34;-Xms1024m&#34;</span>,<span style="color:#e6db74">&#34;-Xmx1024m&#34;</span>, <span style="color:#e6db74">&#34;-jar&#34;</span>,<span style="color:#e6db74">&#34;/app/jenkins.war&#34;</span>]<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>制作镜像</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker build -t registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:2.176.2  .
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> java:8</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">echo</span> <span class="s1">&#39;hello docker, start build image&#39;</span><span class="err">
+</span><span class="err"></span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> mkdir -p /app<span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
+</span><span class="err"></span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> <span class="nb">echo</span> <span class="s2">&#34;Asia/Shanghai&#34;</span> &gt; /etc/timezone<span class="err">
+</span><span class="err"></span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> jenkins.war .<span class="err">
+</span><span class="err"></span><span class="err">
+</span><span class="err"></span><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;java&#34;</span> <span class="p">,</span><span class="s2">&#34;-Xms1024m&#34;</span><span class="p">,</span><span class="s2">&#34;-Xmx1024m&#34;</span><span class="p">,</span> <span class="s2">&#34;-jar&#34;</span><span class="p">,</span><span class="s2">&#34;/app/jenkins.war&#34;</span><span class="p">]</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>制作镜像</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">docker build -t registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:2.176.2  .
 
 docker push registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:2.176.2
 
-</code></pre></div><h4 id="k8sjenkins">K8S安装Jenkins应用</h4>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="k8sjenkins">K8S安装Jenkins应用</h4>
 <p>在k8s集群内创建Jenkins工作的namespace，我这边统一放在devops这个ns底下；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl create ns devops
-</code></pre></div><p>我这里把Jenkins工作目录单独挂载到PVC，需要先创建pv-pvc,挂载点是使用的nfs服务，请先创建好服务，jenkins-pv-pvc.yaml如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: jenkins-home-pv
-spec:
-  capacity:
-    storage: 100Gi
-  accessModes:
-    - ReadWriteMany
-  nfs:
-    server: <span style="color:#ae81ff">192.168</span><span style="color:#ae81ff">.1</span><span style="color:#ae81ff">.100</span>
-    path: <span style="color:#e6db74">&#34;/data/jenkins_home&#34;</span>
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: jenkins-home-pvc
-  namespace: devops
-spec:
-  accessModes: [<span style="color:#e6db74">&#34;ReadWriteMany&#34;</span>]
-  resources:
-    requests:
-      storage: 100Gi
-</code></pre></div><p>为Jenkins创建单独的ServiceAccount,这里的ClusterRole直接使用的cluster-admin,jenkins-serveraccount.yaml如下；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: jenkins
-  name: jenkins-admin
-  namespace: devops
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: jenkins-admin
-  labels:
-    app: jenkins
-subjects:
-  - kind: ServiceAccount
-    name: jenkins-admin
-    namespace: devops
-roleRef:
-  kind: ClusterRole
-  name: cluster-admin
-  apiGroup: rbac.authorization.k8s.io
-</code></pre></div><p>编写Deployment文件,我使用到了node标签apps.k8s.icjl/devops，打标签的命令如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl label node your-node-name apps.k8s.icjl/devops<span style="color:#f92672">=</span>
-</code></pre></div><p>jenkins-deployment.yaml如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: jenkins
-  namespace: devops
-  labels:
-    app: jenkins
-spec:
-  replicas: <span style="color:#ae81ff">1</span>
-  template:
-    metadata:
-      labels:
-        app: jenkins
-    spec:
-      serviceAccountName: jenkins-admin
-      imagePullSecrets:
-        - name: ram-secret
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: apps.k8s.icjl/devops
-                operator: Exists
-      containers:
-      - name: jenkins
-        image: registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins:<span style="color:#ae81ff">2.176</span><span style="color:#ae81ff">.2</span>
-        imagePullPolicy: IfNotPresent
-        volumeMounts:
-        - name: jenkins-home
-          mountPath: /root/.jenkins
-          readOnly: <span style="color:#66d9ef">false</span>
-        ports:
-        - containerPort: <span style="color:#ae81ff">8080</span>
-        - containerPort: <span style="color:#ae81ff">50000</span>
-      volumes:
-      - name: jenkins-home
-        persistentVolumeClaim:
-          claimName: jenkins-home-pvc
-</code></pre></div><p>创建service，这边使用了NodePort,jenkins-service.yaml如下；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: jenkins
-  name: jenkins
-  namespace: devops
-  annotations:
-    prometheus.io/scrape: <span style="color:#e6db74">&#39;true&#39;</span>
-spec:
-  type: NodePort
-  ports:
-  - name: jenkins-web
-    port: <span style="color:#ae81ff">8080</span>
-    targetPort: <span style="color:#ae81ff">8080</span>
-    nodePort: <span style="color:#ae81ff">31442</span>
-  - name: jenkins-agent
-    port: <span style="color:#ae81ff">50000</span>
-    targetPort: <span style="color:#ae81ff">50000</span>
-    nodePort: <span style="color:#ae81ff">30005</span>
-  selector:
-    app: jenkins
-</code></pre></div><p>也可以使用ingress暴露的方式,jenkins-ingress.yaml如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: jenkins
-  labels:
-    name: jenkins
-  namespace: devops
-spec:
-  rules:
-  - host: jenkins.hiningmeng.cn
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: jenkins
-          servicePort: <span style="color:#ae81ff">8080</span>
-</code></pre></div><p>执行</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> kubectl apply -f jenkins-pv-pvc.yaml
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create ns devops
+</code></pre></td></tr></table>
+</div>
+</div><p>我这里把Jenkins工作目录单独挂载到PVC，需要先创建pv-pvc,挂载点是使用的nfs服务，请先创建好服务，jenkins-pv-pvc.yaml如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>PersistentVolume<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins-home-pv<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>capacity<span class="p">:</span><span class="w">
+</span><span class="w">    </span>storage<span class="p">:</span><span class="w"> </span>100Gi<span class="w">
+</span><span class="w">  </span>accessModes<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>ReadWriteMany<span class="w">
+</span><span class="w">  </span>nfs<span class="p">:</span><span class="w">
+</span><span class="w">    </span>server<span class="p">:</span><span class="w"> </span><span class="m">192.168</span><span class="m">.1</span><span class="m">.100</span><span class="w">
+</span><span class="w">    </span>path<span class="p">:</span><span class="w"> </span><span class="s2">&#34;/data/jenkins_home&#34;</span><span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>PersistentVolumeClaim<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins-home-pvc<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>devops<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>accessModes<span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;ReadWriteMany&#34;</span><span class="p">]</span><span class="w">
+</span><span class="w">  </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">    </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">      </span>storage<span class="p">:</span><span class="w"> </span>100Gi<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>为Jenkins创建单独的ServiceAccount,这里的ClusterRole直接使用的cluster-admin,jenkins-serveraccount.yaml如下；</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>ServiceAccount<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins-admin<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>devops<span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>rbac.authorization.k8s.io/v1beta1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>ClusterRoleBinding<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins-admin<span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w"></span>subjects<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>kind<span class="p">:</span><span class="w"> </span>ServiceAccount<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>jenkins-admin<span class="w">
+</span><span class="w">    </span>namespace<span class="p">:</span><span class="w"> </span>devops<span class="w">
+</span><span class="w"></span>roleRef<span class="p">:</span><span class="w">
+</span><span class="w">  </span>kind<span class="p">:</span><span class="w"> </span>ClusterRole<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>cluster-admin<span class="w">
+</span><span class="w">  </span>apiGroup<span class="p">:</span><span class="w"> </span>rbac.authorization.k8s.io<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>编写Deployment文件,我使用到了node标签apps.k8s.icjl/devops，打标签的命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl label node your-node-name apps.k8s.icjl/devops<span class="o">=</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>jenkins-deployment.yaml如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Deployment<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>devops<span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>replicas<span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>serviceAccountName<span class="p">:</span><span class="w"> </span>jenkins-admin<span class="w">
+</span><span class="w">      </span>imagePullSecrets<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>ram-secret<span class="w">
+</span><span class="w">      </span>affinity<span class="p">:</span><span class="w">
+</span><span class="w">        </span>nodeAffinity<span class="p">:</span><span class="w">
+</span><span class="w">          </span>requiredDuringSchedulingIgnoredDuringExecution<span class="p">:</span><span class="w">
+</span><span class="w">            </span>nodeSelectorTerms<span class="p">:</span><span class="w">
+</span><span class="w">            </span>-<span class="w"> </span>matchExpressions<span class="p">:</span><span class="w">
+</span><span class="w">              </span>-<span class="w"> </span>key<span class="p">:</span><span class="w"> </span>apps.k8s.icjl/devops<span class="w">
+</span><span class="w">                </span>operator<span class="p">:</span><span class="w"> </span>Exists<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>registry.cn-hangzhou.aliyuncs.com/hiningmeng/jenkins<span class="p">:</span><span class="m">2.176</span><span class="m">.2</span><span class="w">
+</span><span class="w">        </span>imagePullPolicy<span class="p">:</span><span class="w"> </span>IfNotPresent<span class="w">
+</span><span class="w">        </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>jenkins-home<span class="w">
+</span><span class="w">          </span>mountPath<span class="p">:</span><span class="w"> </span>/root/.jenkins<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">        </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">50000</span><span class="w">
+</span><span class="w">      </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>jenkins-home<span class="w">
+</span><span class="w">        </span>persistentVolumeClaim<span class="p">:</span><span class="w">
+</span><span class="w">          </span>claimName<span class="p">:</span><span class="w"> </span>jenkins-home-pvc<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>创建service，这边使用了NodePort,jenkins-service.yaml如下；</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>devops<span class="w">
+</span><span class="w">  </span>annotations<span class="p">:</span><span class="w">
+</span><span class="w">    </span>prometheus.io/scrape<span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>type<span class="p">:</span><span class="w"> </span>NodePort<span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>jenkins-web<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">    </span>nodePort<span class="p">:</span><span class="w"> </span><span class="m">31442</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>jenkins-agent<span class="w">
+</span><span class="w">    </span>port<span class="p">:</span><span class="w"> </span><span class="m">50000</span><span class="w">
+</span><span class="w">    </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">50000</span><span class="w">
+</span><span class="w">    </span>nodePort<span class="p">:</span><span class="w"> </span><span class="m">30005</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>也可以使用ingress暴露的方式,jenkins-ingress.yaml如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Ingress<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>devops<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>rules<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>host<span class="p">:</span><span class="w"> </span>jenkins.hiningmeng.cn<span class="w">
+</span><span class="w">    </span>http<span class="p">:</span><span class="w">
+</span><span class="w">      </span>paths<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>path<span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">        </span>backend<span class="p">:</span><span class="w">
+</span><span class="w">          </span>serviceName<span class="p">:</span><span class="w"> </span>jenkins<span class="w">
+</span><span class="w">          </span>servicePort<span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>执行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"> kubectl apply -f jenkins-pv-pvc.yaml
  kubectl apply -f jenkins-serveraccount.yaml
  kubectl apply -f jenkins-deployment.yaml
  kubectl apply -f jenkins-service.yaml
  kubectl apply -f jenkins-ingress.yaml
-</code></pre></div><p><img src="http://img.hixuxu.com/2019-08-06-065151.png" alt="image-20190806145150888"></p>
+</code></pre></td></tr></table>
+</div>
+</div><p><img src="http://img.hixuxu.com/2019-08-06-065151.png" alt="image-20190806145150888"></p>
 
     </div>
 
