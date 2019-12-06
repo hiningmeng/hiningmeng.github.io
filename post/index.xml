@@ -6,10 +6,28 @@
     <description>Recent content in Posts on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 16:33:58 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 17:14:03 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>K8s Traefik Ingress</title>
+      <link>http://www.hiningmeng.cn/post/k8s-traefik-ingress/</link>
+      <pubDate>Fri, 06 Dec 2019 17:14:03 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-traefik-ingress/</guid>
+      <description>K8S中服务暴露的方式有多种，包括Nodeport、Loadbalancer、Ingress等，其中Ingress就是从kubernetes</description>
+    </item>
+    
+    <item>
+      <title>K8s Kong Ingress</title>
+      <link>http://www.hiningmeng.cn/post/k8s-kong-ingress/</link>
+      <pubDate>Fri, 06 Dec 2019 17:13:52 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-kong-ingress/</guid>
+      <description>Kong现在已经支持在K8S内做为Kubernetes Ingress Controller，Kong直接与Kubernetes生命周期相关联。随着应用程序</description>
+    </item>
     
     <item>
       <title>k8s下使用Jenkins实现CICD(一)</title>

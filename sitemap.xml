@@ -3,7 +3,77 @@
   
   <url>
     <loc>http://www.hiningmeng.cn/categories/</loc>
-    <lastmod>2019-12-06T16:33:58+08:00</lastmod>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/tags/ingress/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/tags/k8s/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/post/k8s-traefik-ingress/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/categories/kubernetes/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/post/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/tags/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/tags/traefik/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/</loc>
+    <lastmod>2019-12-06T17:14:03+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/post/k8s-kong-ingress/</loc>
+    <lastmod>2019-12-06T17:13:52+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.hiningmeng.cn/tags/kong/</loc>
+    <lastmod>2019-12-06T17:13:52+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -16,42 +86,7 @@
   </url>
   
   <url>
-    <loc>http://www.hiningmeng.cn/tags/k8s/</loc>
-    <lastmod>2019-12-06T16:33:58+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>http://www.hiningmeng.cn/post/k8s-jenkins-cicd-1/</loc>
-    <lastmod>2019-12-06T16:33:58+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.hiningmeng.cn/categories/kubernetes/</loc>
-    <lastmod>2019-12-06T16:33:58+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.hiningmeng.cn/post/</loc>
-    <lastmod>2019-12-06T16:33:58+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.hiningmeng.cn/tags/</loc>
-    <lastmod>2019-12-06T16:33:58+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.hiningmeng.cn/</loc>
     <lastmod>2019-12-06T16:33:58+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

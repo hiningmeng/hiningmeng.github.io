@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kong on 徐柠檬的博客</title>
+    <link>http://www.hiningmeng.cn/tags/kong/</link>
+    <description>Recent content in kong on 徐柠檬的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 06 Dec 2019 17:13:52 +0800</lastBuildDate>
+    
+	<atom:link href="http://www.hiningmeng.cn/tags/kong/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>K8s Kong Ingress</title>
+      <link>http://www.hiningmeng.cn/post/k8s-kong-ingress/</link>
+      <pubDate>Fri, 06 Dec 2019 17:13:52 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-kong-ingress/</guid>
+      <description>Kong现在已经支持在K8S内做为Kubernetes Ingress Controller，Kong直接与Kubernetes生命周期相关联。随着应用程序</description>
+    </item>
+    
+  </channel>
+</rss>
