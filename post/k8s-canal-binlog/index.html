@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>k8s下RocketMQ实战 - 徐柠檬的博客</title>
+  <title>阿里canal&#43;RocketMQ实现MySQL binlog订阅 - 徐柠檬的博客</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="hiningmeng" />
-  <meta name="description" content="RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。 RocketMQ的部署方式有多种： 2" />
+  <meta name="description" content="canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.60.1" />
 
 
-<link rel="canonical" href="http://www.hiningmeng.cn/post/k8s-rocketmq-install/" />
+<link rel="canonical" href="http://www.hiningmeng.cn/post/k8s-canal-binlog/" />
 
 
 
@@ -59,23 +59,23 @@
 
 
 
-<meta property="og:title" content="k8s下RocketMQ实战" />
-<meta property="og:description" content="RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。 RocketMQ的部署方式有多种： 2" />
+<meta property="og:title" content="阿里canal&#43;RocketMQ实现MySQL binlog订阅" />
+<meta property="og:description" content="canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://www.hiningmeng.cn/post/k8s-rocketmq-install/" />
-<meta property="article:published_time" content="2019-12-06T17:50:21+08:00" />
-<meta property="article:modified_time" content="2019-12-06T17:50:21+08:00" />
-<meta itemprop="name" content="k8s下RocketMQ实战">
-<meta itemprop="description" content="RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。 RocketMQ的部署方式有多种： 2">
-<meta itemprop="datePublished" content="2019-12-06T17:50:21&#43;08:00" />
-<meta itemprop="dateModified" content="2019-12-06T17:50:21&#43;08:00" />
-<meta itemprop="wordCount" content="1331">
+<meta property="og:url" content="http://www.hiningmeng.cn/post/k8s-canal-binlog/" />
+<meta property="article:published_time" content="2019-12-09T14:50:22+08:00" />
+<meta property="article:modified_time" content="2019-12-09T14:50:22+08:00" />
+<meta itemprop="name" content="阿里canal&#43;RocketMQ实现MySQL binlog订阅">
+<meta itemprop="description" content="canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14">
+<meta itemprop="datePublished" content="2019-12-09T14:50:22&#43;08:00" />
+<meta itemprop="dateModified" content="2019-12-09T14:50:22&#43;08:00" />
+<meta itemprop="wordCount" content="1230">
 
 
 
-<meta itemprop="keywords" content="k8s,rocketmq," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="k8s下RocketMQ实战"/>
-<meta name="twitter:description" content="RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。 RocketMQ的部署方式有多种： 2"/>
+<meta itemprop="keywords" content="k8s,canal,rocketmq," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="阿里canal&#43;RocketMQ实现MySQL binlog订阅"/>
+<meta name="twitter:description" content="canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -219,17 +219,17 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">k8s下RocketMQ实战</h1>
+      <h1 class="post-title">阿里canal&#43;RocketMQ实现MySQL binlog订阅</h1>
       
       <div class="post-meta">
-        <time datetime="2019-12-06" class="post-time">
-          2019-12-06
+        <time datetime="2019-12-09" class="post-time">
+          2019-12-09
         </time>
         <div class="post-category">
             <a href="http://www.hiningmeng.cn/categories/kubernetes/"> kubernetes </a>
             
           </div>
-        <span class="more-meta"> 约 1331 字 </span>
+        <span class="more-meta"> 约 1230 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
 
         
@@ -263,215 +263,88 @@
 
     
     <div class="post-content">
-      <p>RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。
-<img src="http://img.hixuxu.com/2019-09-16-021800.jpg" alt=""></p>
-<p>RocketMQ的部署方式有多种：</p>
+      <p>canal [kə'næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。</p>
+<p>canal 1.1.14版本已经原生支持Kafka和RocketMQ的消息投递，并且引入cannal-admin工程，可以在WebUI上进行动态管理能力，支持配置集群、server、instance等模块。</p>
+<h4 id="heading">准备工作</h4>
 <ul>
-<li>2m-noslave： 多Master模式</li>
-<li>2m-2s-sync： 多Master多Slave模式，同步双写</li>
-<li>2m-2s-async：多Master多Slave模式，异步复制</li>
+<li>公司基于k8s进行环境应用管理，需提前准备好K8S集群</li>
+<li>采用RocketMQ进行消息管理，需要安装RocketMQ服务</li>
+<li>canal配置文件和file数据、日志需要持久存储，提前准备好nfs</li>
 </ul>
-<p>需要安装NameServer，Broker服务，本次安装采用2主模式，所以需要启动两个POD，每个Pod有两个container容器。</p>
-<h5 id="heading">准备镜像</h5>
-<p>使用官方提供的rocketmqinc/rocketmq:latest，需要修改时区和yum源，方便后续容器调试。</p>
-<pre><code>From rocketmqinc/rocketmq
+<h5 id="k8s">K8S集群安装</h5>
+<ul>
+<li>
+<p><a href="https://mp.weixin.qq.com/s/0Z58KexaBs0OdD2sJ88uuA">Centos7下使用kubeadm搭建Kubernetes-v1.14.2</a></p>
+</li>
+<li>
+<p><a href="http://www.hiningmeng.cn/2019/09/18/k8s-rocketmq/">RockerMQ双主模式安装</a></p>
+</li>
+</ul>
+<p>准备canal持久存储需要的PVC，这边使用storageclass模式：</p>
+<pre><code>$ cat canal-pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: canal-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: managed-nfs-storage
+</code></pre><p>canal启动的时候需要配置文件canal.properties，直接存放对应PVC目录下，register ip是canal自己的地址canal.canal.svc.cluster.local，admin地址我们定义为canal-admin.canal.svc.cluster.local:8089，如下：</p>
+<pre><code># register ip
+canal.register.ip = canal.canal.svc.cluster.local
 
-ENV TimeZone=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TimeZone /etc/localtime &amp;&amp; echo $TimeZone &gt; /etc/timezone
+# canal admin config
+canal.admin.manager = canal-admin.canal.svc.cluster.local:8089
+canal.admin.port = 11110
+canal.admin.user = admin
+canal.admin.passwd = 4ACFE3202A5FF5CF467898FC58AAB1D615029441
+# admin auto register
+canal.admin.register.auto = true
+canal.admin.register.cluster =
+</code></pre><p>canal-admin的配置文件如下,端口默认8089，数据库使用我们已经安装好的,canal验证使用admin，密码admin，和前面注册时保持一致：</p>
+<pre><code>server:
+  port: 8089
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
-RUN rm /etc/yum.repos.d/* -rf
+spring.datasource:
+  address: mysql.databases.svc.cluster.local:3306
+  database: canal_manager
+  username: root
+  password: 23985111
+  driver-class-name: com.mysql.jdbc.Driver
+  url: jdbc:mysql://${spring.datasource.address}/${spring.datasource.database}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false
+  hikari:
+    maximum-pool-size: 30
+    minimum-idle: 1
 
-ADD CentOS-Base.repo  /etc/yum.repos.d/
-
-RUN rm -rf rm -rf /opt/rocketmq-4.4.0/conf/2m* &amp;&amp; \
-    rm -rf /opt/rocketmq-4.4.0/conf/broker.conf &amp;&amp; \
-    rm -rf /opt/rocketmq-4.4.0/bin/*.cmd
-
-#sudo docker build -t registry.cn-hangzhou.aliyuncs.com/hiningmeng/rocketmq:v4.4.0  .
-</code></pre><h5 id="heading1">准备配置文件</h5>
-<p>RocketMQ默认提供的配置文件都是最基本的，很多配置都是默认值，在生产环境中我们需要根据实际情况进行修改。样例配置如下：</p>
-<pre><code>$ cat broker-a.properties
-#所属集群名字
-brokerClusterName=mq-qa
-#broker名字
-brokerName=broker-a
-#0表示Master，&gt;0表示Slave
-brokerId=0
-#删除文件时间点，默认凌晨 4点
-deleteWhen=04
-#文件保留时间，默认 48 小时
-fileReservedTime=48
-
-brokerRole=ASYNC_MASTER
-flushDiskType=ASYNC_FLUSH
-#nameServer地址，分号分割
-namesrvAddr=rocketmq-a.mq.svc.cluster.local:9876;rocketmq-b.mq.svc.cluster.local:9876
-defaultTopicQueueNums=4
-autoCreateTopicEnable=true
-autoCreateSubscriptionGroup=true
-listenPort=10911
-#commitLog每个文件的大小默认1G
-mapedFileSizeCommitLog=1073741824
-#ConsumeQueue每个文件默认存30W条，根据业务情况调整
-mapedFileSizeConsumeQueue=300000
-
-#-------------------
-
-$ cat broker-b.properties
-#所属集群名字
-brokerClusterName=changjinglu-mq-qa
-#broker名字
-brokerName=broker-b
-#0表示Master，&gt;0表示Slave
-brokerId=0
-#删除文件时间点，默认凌晨 4点
-deleteWhen=04
-#文件保留时间，默认 48 小时
-fileReservedTime=48
-
-brokerRole=ASYNC_MASTER
-flushDiskType=ASYNC_FLUSH
-#nameServer地址，分号分割
-namesrvAddr=rocketmq-a.mq.svc.cluster.local:9876;rocketmq-b.mq.svc.cluster.local:9876
-defaultTopicQueueNums=4
-autoCreateTopicEnable=true
-autoCreateSubscriptionGroup=true
-listenPort=10911
-#commitLog每个文件的大小默认1G
-mapedFileSizeCommitLog=1073741824
-#ConsumeQueue每个文件默认存30W条，根据业务情况调整
-mapedFileSizeConsumeQueue=300000
-</code></pre><h5 id="k8srocketmq">K8S安装RocketMQ</h5>
-<p>本次安装的服务使用独立的namespace。</p>
-<pre><code>kubectl create ns mq
-</code></pre><p>broker的配置文件采用configmap的方式挂载到容器内，创建configmap的命令如下：</p>
-<pre><code>kubectl create configmap broker-config --from-file=broker-a.properties --from-file=broker-b.properties -n mq
-</code></pre><p>启动命令-c可以指定配置文件，NameSvrAddr使用配置文件内指定的，配置文件使用前面的configmap挂载进来，subPath可以指定具体文件和目录，使用准备deployment文件如下：</p>
-<pre><code>$ cat rocketmq-deployment.yaml
+canal:
+  adminUser: admin
+  adminPasswd: admin
+</code></pre><p>使用官方脚本进行，初始化数据库：https://github.com/alibaba/canal/wiki/Canal-Admin-QuickStart</p>
+<p>canal-admin在K8S内以deployment方式部署，如下：</p>
+<pre><code>$ cat canal-admin-deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: rocketmq-a
-  namespace: mq
+  name: canal-admin
+  labels:
+    app: canal-admin
 spec:
   replicas: 1
   template:
     metadata:
-     labels:
-       app: rocketmq-a
+      labels:
+        app: canal-admin
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: apps.k8s.icjl/devops
-                operator: Exists
       imagePullSecrets:
         - name: ram-secret
-      containers:
-      - name: broker
-        image: registry.cn-hangzhou.aliyuncs.com/hiningmeng/rocketmq:v4.4.0
-        command: [&quot;sh&quot;,&quot;-c&quot;,&quot;/opt/rocketmq-4.4.0/bin/mqbroker  -c /opt/rocketmq-4.4.0/conf/broker-a.properties&quot;]
-        imagePullPolicy: Always
-        volumeMounts:
-          - mountPath: /root/logs
-            name: rocketmq-data
-            subPath: mq-brokeroptlogs
-          - mountPath: /root/store
-            name: rocketmq-data
-            subPath: mq-brokeroptstore
-          - name: broker-config
-            mountPath: /opt/rocketmq-4.4.0/conf/broker-a.properties
-            subPath: broker-a.properties
-        env:
-          - name: MAX_POSSIBLE_HEAP
-            value: &quot;4294967296&quot;
-      - name: namesrv
-        image: registry.cn-hangzhou.aliyuncs.com/hiningmeng/rocketmq:v4.4.0
-        command: [&quot;sh&quot;,&quot;mqnamesrv&quot;]
-        imagePullPolicy: IfNotPresent
-        ports:
-          - containerPort: 9876
-        volumeMounts:
-          - mountPath: /root/logs
-            name: rocketmq-data
-            subPath: mq-namesrvoptlogs
-          - mountPath: /root/store
-            name: rocketmq-data
-            subPath: mq-namesrvoptstore
-        env:
-          - name: MAX_POSSIBLE_HEAP
-            value: &quot;1073741824&quot;
-      volumes:
-      - name: rocketmq-data
-        persistentVolumeClaim:
-          claimName: rocketmq-data-a
-      - name: broker-config
-        configMap:
-          name: broker-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: rocketmq-a
-  name: rocketmq-a
-  namespace: mq
-spec:
-  ports:
-  - name: rocketmq-namesrv
-    port: 9876
-  selector:
-    app: rocketmq-a
-</code></pre><p>在deployment中使用到了persistentVolumeClaim，我采用的是storageclass的方式，具体使用可以自己学习下，需要准备pvc配置文件如下：</p>
-<pre><code>$ cat rocketmq-pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: rocketmq-data-a
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: managed-nfs-storage
-
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: rocketmq-data-b
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: managed-nfs-storage
-</code></pre><h5 id="heading2">启动服务</h5>
-<pre><code>kubectl apply -f rocketmq-pvc.yaml -n mq
-kubectl apply -f rocketmq-master-a-deployment.yaml -n mq
-kubectl apply -f rocketmq-master-b-deployment.yaml -n mq
-</code></pre><h5 id="heading3">测试消息发送</h5>
-<pre><code>export NAMESRV_ADDR=rocketmq-a.mq.svc.cluster.local:9876
-sh tools.sh org.apache.rocketmq.example.quickstart.Producer
-sh tools.sh org.apache.rocketmq.example.quickstart.Consumer
-</code></pre><h5 id="console">安装console页面管理</h5>
-<pre><code>$ cat rocketmq-admin-deployment.yaml
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: rocketmq-admin
-  namespace: mq
-spec:
-  replicas: 1
-  template:
-    metadata:
-     labels:
-       app: rocketmq-admin
-    spec:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -480,55 +353,131 @@ spec:
               - key: apps.k8s.icjl/devops
                 operator: Exists
       containers:
-      - name: rocketmq-admin
-        image: styletang/rocketmq-console-ng
+      - name: canal-admin
+        image: canal/canal-admin:v1.1.4
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 8080
-        env:
-          - name: JAVA_OPTS
-            value: &quot;-Drocketmq.namesrv.addr=rocketmq-a.mq.svc.cluster.local:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false&quot;
+        - name: canal-admin
+          containerPort: 8089
+        volumeMounts:
+        - name: canal-data
+          mountPath: /home/admin/canal-admin/conf/application.yml
+          subPath: application.yml
+      volumes:
+      - name: canal-data
+        persistentVolumeClaim:
+          claimName: canal-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: rocketmq-admin
-  name: rocketmq-admin
-  namespace: mq
+    app: canal-admin
+  name: canal-admin
 spec:
   ports:
-  - name: rocketmq-admin
-    port: 8080
-    targetPort: 8080
+  - name: canal-admin
+    port: 8089
+    targetPort: 8089
   selector:
-    app: rocketmq-admin
+    app: canal-admin
 
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: mq
-  name: rocketmq-admin
+  name: canal-admin
   labels:
-    name: rocketmq-admin
+    name: canal-admin
     ingress.k8s.icjl/business: assigned
   annotations:
     kubernetes.io/ingress.class: &quot;traefik&quot;
 spec:
   tls:
   - hosts:
-    - rocketmq-admin.hiningmeng.cn
+    - canal-admin-qa.icjl.net
     secretName: icjl-net-secret
   rules:
-  - host: rocketmq-admin.hiningmeng.cn
+  - host: canal-admin-qa.icjl.net
     http:
       paths:
       - path: /
         backend:
-          serviceName: rocketmq-admin
-          servicePort: rocketmq-admin
-</code></pre><p><img src="http://img.hixuxu.com/2019-12-06-095418.jpg" alt=""></p>
+          serviceName: canal-admin
+          servicePort: canal-admin
+</code></pre><p>启动admin</p>
+<pre><code>kubectl apply -f canal-admin-deployment.yaml -n canal
+</code></pre><p>准备canal-server的deployment文件：</p>
+<pre><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: canal
+  labels:
+    app: canal
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: canal
+    spec:
+      imagePullSecrets:
+        - name: ram-secret
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: apps.k8s.icjl/devops
+                operator: Exists
+      containers:
+      - name: canal
+        image: canal/canal-server:v1.1.4
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: canal-data
+          mountPath: /home/admin/canal-server/conf/canal.properties
+          subPath: canal.properties
+        - name: canal-data
+          mountPath: /home/admin/canal-server/ins-conf/
+          subPath: ins-conf
+        - name: canal-data
+          mountPath: /home/admin/canal-server/logs
+          subPath: logs
+        - name: canal-data
+          mountPath: /home/admin/canal-server/data
+          subPath: data
+        ports:
+        - name: canal-admin
+          containerPort: 11110
+        - name: canal-port
+          containerPort: 11111
+      volumes:
+      - name: canal-data
+        persistentVolumeClaim:
+          claimName: canal-data
+</code></pre><p>启动cannal-server</p>
+<pre><code>kubectl apply -f canal-deployment.yaml -n canal
+</code></pre><p>打开canal-admin，我们使用的是ingress暴露出来的，默认登录密码admin/123456 。</p>
+<p>可以看到已经自动注册进来一个canal-server了，可以对配置进行修改</p>
+<p><img src="http://img.hixuxu.com/2019-09-18-072415.png" alt=""></p>
+<p>采用RockerMQ做为消息投递，选择Server管理-操作-配置</p>
+<pre><code>canal.serverMode = RocketMQ
+canal.file.data.dir = /home/admin/canal-server/ins-conf/
+
+canal.mq.servers = rocketmq-a.mq.svc.cluster.local:9876,rocketmq-b.mq.svc.cluster.local:9876
+
+canal.mq.producerGroup = hiningmeng
+
+</code></pre><p>新建instance载入模板，进行配置</p>
+<pre><code>canal.instance.master.address=10.40.0.100:3306
+canal.instance.dbUsername=root
+canal.instance.dbPassword=root
+
+canal.instance.filter.regex=uic\\.uic_merchant
+canal.mq.dynamicTopic=uic\\.uic_merchant
+
+</code></pre><p>查看日志和MQ是否成功,enjoy &hellip;</p>
 
     </div>
 
@@ -542,6 +491,7 @@ spec:
     <footer class="post-footer">
       <div class="post-tags">
           <a href="http://www.hiningmeng.cn/tags/k8s/">k8s</a>
+          <a href="http://www.hiningmeng.cn/tags/canal/">canal</a>
           <a href="http://www.hiningmeng.cn/tags/rocketmq/">rocketmq</a>
           
         </div>
@@ -549,22 +499,9 @@ spec:
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/k8s-canal-binlog/">
-            
-            <i class="iconfont">
-              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
-  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="18" height="18">
-  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
-</svg>
-
-            </i>
-            <span class="prev-text nav-default">阿里canal&#43;RocketMQ实现MySQL binlog订阅</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
         
-          <a class="next" href="/post/k8s-log-aliyun/">
-            <span class="next-text nav-default">k8s下traefik日志收集到阿里云日志服务</span>
+          <a class="next" href="/post/k8s-rocketmq-install/">
+            <span class="next-text nav-default">k8s下RocketMQ实战</span>
             <span class="prev-text nav-mobile">下一篇</span>
             
             <i class="iconfont">

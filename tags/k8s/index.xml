@@ -6,10 +6,19 @@
     <description>Recent content in k8s on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 06 Dec 2019 17:50:21 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 09 Dec 2019 14:50:22 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>阿里canal&#43;RocketMQ实现MySQL binlog订阅</title>
+      <link>http://www.hiningmeng.cn/post/k8s-canal-binlog/</link>
+      <pubDate>Mon, 09 Dec 2019 14:50:22 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/k8s-canal-binlog/</guid>
+      <description>canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14</description>
+    </item>
     
     <item>
       <title>k8s下RocketMQ实战</title>

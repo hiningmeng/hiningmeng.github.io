@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>rocketmq on 徐柠檬的博客</title>
-    <link>http://www.hiningmeng.cn/tags/rocketmq/</link>
-    <description>Recent content in rocketmq on 徐柠檬的博客</description>
+    <title>canal on 徐柠檬的博客</title>
+    <link>http://www.hiningmeng.cn/tags/canal/</link>
+    <description>Recent content in canal on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Mon, 09 Dec 2019 14:50:22 +0800</lastBuildDate>
     
-	<atom:link href="http://www.hiningmeng.cn/tags/rocketmq/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.hiningmeng.cn/tags/canal/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>http://www.hiningmeng.cn/post/k8s-canal-binlog/</guid>
       <description>canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14</description>
-    </item>
-    
-    <item>
-      <title>k8s下RocketMQ实战</title>
-      <link>http://www.hiningmeng.cn/post/k8s-rocketmq-install/</link>
-      <pubDate>Fri, 06 Dec 2019 17:50:21 +0800</pubDate>
-      
-      <guid>http://www.hiningmeng.cn/post/k8s-rocketmq-install/</guid>
-      <description>RocketMQ主要有四大部分：NameServer，Broker，Producer，Consumer。 RocketMQ的部署方式有多种： 2</description>
     </item>
     
   </channel>
