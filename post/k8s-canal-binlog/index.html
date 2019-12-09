@@ -69,7 +69,7 @@
 <meta itemprop="description" content="canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14">
 <meta itemprop="datePublished" content="2019-12-09T14:50:22&#43;08:00" />
 <meta itemprop="dateModified" content="2019-12-09T14:50:22&#43;08:00" />
-<meta itemprop="wordCount" content="1230">
+<meta itemprop="wordCount" content="1414">
 
 
 
@@ -229,7 +229,7 @@
             <a href="http://www.hiningmeng.cn/categories/kubernetes/"> kubernetes </a>
             
           </div>
-        <span class="more-meta"> 约 1230 字 </span>
+        <span class="more-meta"> 约 1414 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
 
         
@@ -281,7 +281,23 @@
 </li>
 </ul>
 <p>准备canal持久存储需要的PVC，这边使用storageclass模式：</p>
-<pre><code>$ cat canal-pvc.yaml
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ cat canal-pvc.yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -293,21 +309,65 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: managed-nfs-storage
-</code></pre><p>canal启动的时候需要配置文件canal.properties，直接存放对应PVC目录下，register ip是canal自己的地址canal.canal.svc.cluster.local，admin地址我们定义为canal-admin.canal.svc.cluster.local:8089，如下：</p>
-<pre><code># register ip
-canal.register.ip = canal.canal.svc.cluster.local
+</code></pre></td></tr></table>
+</div>
+</div><p>canal启动的时候需要配置文件canal.properties，直接存放对应PVC目录下，register ip是canal自己的地址canal.canal.svc.cluster.local，admin地址我们定义为canal-admin.canal.svc.cluster.local:8089，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># register ip</span>
+canal.register.ip <span class="o">=</span> canal.canal.svc.cluster.local
 
-# canal admin config
-canal.admin.manager = canal-admin.canal.svc.cluster.local:8089
-canal.admin.port = 11110
-canal.admin.user = admin
-canal.admin.passwd = 4ACFE3202A5FF5CF467898FC58AAB1D615029441
-# admin auto register
-canal.admin.register.auto = true
-canal.admin.register.cluster =
-</code></pre><p>canal-admin的配置文件如下,端口默认8089，数据库使用我们已经安装好的,canal验证使用admin，密码admin，和前面注册时保持一致：</p>
-<pre><code>server:
-  port: 8089
+<span class="c1"># canal admin config</span>
+canal.admin.manager <span class="o">=</span> canal-admin.canal.svc.cluster.local:8089
+canal.admin.port <span class="o">=</span> <span class="m">11110</span>
+canal.admin.user <span class="o">=</span> admin
+canal.admin.passwd <span class="o">=</span> 4ACFE3202A5FF5CF467898FC58AAB1D615029441
+<span class="c1"># admin auto register</span>
+canal.admin.register.auto <span class="o">=</span> <span class="nb">true</span>
+canal.admin.register.cluster <span class="o">=</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>canal-admin的配置文件如下,端口默认8089，数据库使用我们已经安装好的,canal验证使用admin，密码admin，和前面注册时保持一致：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">server:
+  port: <span class="m">8089</span>
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -317,19 +377,101 @@ spring.datasource:
   address: mysql.databases.svc.cluster.local:3306
   database: canal_manager
   username: root
-  password: 23985111
+  password: <span class="m">23985111</span>
   driver-class-name: com.mysql.jdbc.Driver
-  url: jdbc:mysql://${spring.datasource.address}/${spring.datasource.database}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false
+  url: jdbc:mysql://<span class="si">${</span><span class="nv">spring</span><span class="p">.datasource.address</span><span class="si">}</span>/<span class="si">${</span><span class="nv">spring</span><span class="p">.datasource.database</span><span class="si">}</span>?useUnicode<span class="o">=</span>true<span class="p">&amp;</span><span class="nv">characterEncoding</span><span class="o">=</span>UTF-8<span class="p">&amp;</span><span class="nv">useSSL</span><span class="o">=</span><span class="nb">false</span>
   hikari:
-    maximum-pool-size: 30
-    minimum-idle: 1
+    maximum-pool-size: <span class="m">30</span>
+    minimum-idle: <span class="m">1</span>
 
 canal:
   adminUser: admin
   adminPasswd: admin
-</code></pre><p>使用官方脚本进行，初始化数据库：https://github.com/alibaba/canal/wiki/Canal-Admin-QuickStart</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用官方脚本进行，初始化数据库：https://github.com/alibaba/canal/wiki/Canal-Admin-QuickStart</p>
 <p>canal-admin在K8S内以deployment方式部署，如下：</p>
-<pre><code>$ cat canal-admin-deployment.yaml
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ cat canal-admin-deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -337,7 +479,7 @@ metadata:
   labels:
     app: canal-admin
 spec:
-  replicas: 1
+  replicas: <span class="m">1</span>
   template:
     metadata:
       labels:
@@ -358,7 +500,7 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - name: canal-admin
-          containerPort: 8089
+          containerPort: <span class="m">8089</span>
         volumeMounts:
         - name: canal-data
           mountPath: /home/admin/canal-admin/conf/application.yml
@@ -377,8 +519,8 @@ metadata:
 spec:
   ports:
   - name: canal-admin
-    port: 8089
-    targetPort: 8089
+    port: <span class="m">8089</span>
+    targetPort: <span class="m">8089</span>
   selector:
     app: canal-admin
 
@@ -391,7 +533,7 @@ metadata:
     name: canal-admin
     ingress.k8s.icjl/business: assigned
   annotations:
-    kubernetes.io/ingress.class: &quot;traefik&quot;
+    kubernetes.io/ingress.class: <span class="s2">&#34;traefik&#34;</span>
 spec:
   tls:
   - hosts:
@@ -405,17 +547,78 @@ spec:
         backend:
           serviceName: canal-admin
           servicePort: canal-admin
-</code></pre><p>启动admin</p>
-<pre><code>kubectl apply -f canal-admin-deployment.yaml -n canal
-</code></pre><p>准备canal-server的deployment文件：</p>
-<pre><code>apiVersion: extensions/v1beta1
+</code></pre></td></tr></table>
+</div>
+</div><p>启动admin</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f canal-admin-deployment.yaml -n canal
+</code></pre></td></tr></table>
+</div>
+</div><p>准备canal-server的deployment文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: canal
   labels:
     app: canal
 spec:
-  replicas: 1
+  replicas: <span class="m">1</span>
   template:
     metadata:
       labels:
@@ -449,35 +652,70 @@ spec:
           subPath: data
         ports:
         - name: canal-admin
-          containerPort: 11110
+          containerPort: <span class="m">11110</span>
         - name: canal-port
-          containerPort: 11111
+          containerPort: <span class="m">11111</span>
       volumes:
       - name: canal-data
         persistentVolumeClaim:
           claimName: canal-data
-</code></pre><p>启动cannal-server</p>
-<pre><code>kubectl apply -f canal-deployment.yaml -n canal
-</code></pre><p>打开canal-admin，我们使用的是ingress暴露出来的，默认登录密码admin/123456 。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>启动cannal-server</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f canal-deployment.yaml -n canal
+</code></pre></td></tr></table>
+</div>
+</div><p>打开canal-admin，我们使用的是ingress暴露出来的，默认登录密码admin/123456 。</p>
 <p>可以看到已经自动注册进来一个canal-server了，可以对配置进行修改</p>
 <p><img src="http://img.hixuxu.com/2019-09-18-072415.png" alt=""></p>
 <p>采用RockerMQ做为消息投递，选择Server管理-操作-配置</p>
-<pre><code>canal.serverMode = RocketMQ
-canal.file.data.dir = /home/admin/canal-server/ins-conf/
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">canal.serverMode <span class="o">=</span> RocketMQ
+canal.file.data.dir <span class="o">=</span> /home/admin/canal-server/ins-conf/
 
-canal.mq.servers = rocketmq-a.mq.svc.cluster.local:9876,rocketmq-b.mq.svc.cluster.local:9876
+canal.mq.servers <span class="o">=</span> rocketmq-a.mq.svc.cluster.local:9876,rocketmq-b.mq.svc.cluster.local:9876
 
-canal.mq.producerGroup = hiningmeng
+canal.mq.producerGroup <span class="o">=</span> hiningmeng
 
-</code></pre><p>新建instance载入模板，进行配置</p>
-<pre><code>canal.instance.master.address=10.40.0.100:3306
-canal.instance.dbUsername=root
-canal.instance.dbPassword=root
+</code></pre></td></tr></table>
+</div>
+</div><p>新建instance载入模板，进行配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">canal.instance.master.address<span class="o">=</span>10.40.0.100:3306
+canal.instance.dbUsername<span class="o">=</span>root
+canal.instance.dbPassword<span class="o">=</span>root
 
-canal.instance.filter.regex=uic\\.uic_merchant
-canal.mq.dynamicTopic=uic\\.uic_merchant
+canal.instance.filter.regex<span class="o">=</span>uic<span class="se">\\</span>.uic_merchant
+canal.mq.dynamicTopic<span class="o">=</span>uic<span class="se">\\</span>.uic_merchant
 
-</code></pre><p>查看日志和MQ是否成功,enjoy &hellip;</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>查看日志和MQ是否成功,enjoy &hellip;</p>
 
     </div>
 
