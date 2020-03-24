@@ -6,24 +6,24 @@
     <description>Recent content in Tags on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 09 Dec 2019 14:50:22 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 24 Mar 2020 22:15:32 +0800</lastBuildDate>
     
 	<atom:link href="http://www.hiningmeng.cn/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>canal</title>
-      <link>http://www.hiningmeng.cn/tags/canal/</link>
-      <pubDate>Mon, 09 Dec 2019 14:50:22 +0800</pubDate>
+      <title>golang</title>
+      <link>http://www.hiningmeng.cn/tags/golang/</link>
+      <pubDate>Tue, 24 Mar 2020 22:15:32 +0800</pubDate>
       
-      <guid>http://www.hiningmeng.cn/tags/canal/</guid>
+      <guid>http://www.hiningmeng.cn/tags/golang/</guid>
       <description></description>
     </item>
     
     <item>
       <title>k8s</title>
       <link>http://www.hiningmeng.cn/tags/k8s/</link>
-      <pubDate>Mon, 09 Dec 2019 14:50:22 +0800</pubDate>
+      <pubDate>Fri, 06 Dec 2019 17:50:21 +0800</pubDate>
       
       <guid>http://www.hiningmeng.cn/tags/k8s/</guid>
       <description></description>
@@ -32,7 +32,7 @@
     <item>
       <title>rocketmq</title>
       <link>http://www.hiningmeng.cn/tags/rocketmq/</link>
-      <pubDate>Mon, 09 Dec 2019 14:50:22 +0800</pubDate>
+      <pubDate>Fri, 06 Dec 2019 17:50:21 +0800</pubDate>
       
       <guid>http://www.hiningmeng.cn/tags/rocketmq/</guid>
       <description></description>

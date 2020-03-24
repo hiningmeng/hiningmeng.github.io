@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>devops on 徐柠檬的博客</title>
+    <link>http://www.hiningmeng.cn/categories/devops/</link>
+    <description>Recent content in devops on 徐柠檬的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 24 Mar 2020 22:15:32 +0800</lastBuildDate>
+    
+	<atom:link href="http://www.hiningmeng.cn/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go从零开发一个web站点系列（一）</title>
+      <link>http://www.hiningmeng.cn/post/go-web-service-1/</link>
+      <pubDate>Tue, 24 Mar 2020 22:15:32 +0800</pubDate>
+      
+      <guid>http://www.hiningmeng.cn/post/go-web-service-1/</guid>
+      <description>准备Go环境 安装golang就不写了，这里使用到了gomod管理依赖包，需要Go的版本大于1.12,设置GOPATH和GOPROXY,并打开</description>
+    </item>
+    
+  </channel>
+</rss>

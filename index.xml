@@ -6,19 +6,19 @@
     <description>Recent content on 徐柠檬的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 09 Dec 2019 14:50:22 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 24 Mar 2020 22:15:32 +0800</lastBuildDate>
     
         <atom:link href="http://www.hiningmeng.cn/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>阿里canal&#43;RocketMQ实现MySQL binlog订阅</title>
-      <link>http://www.hiningmeng.cn/post/k8s-canal-binlog/</link>
-      <pubDate>Mon, 09 Dec 2019 14:50:22 +0800</pubDate>
+      <title>Go从零开发一个web站点系列（一）</title>
+      <link>http://www.hiningmeng.cn/post/go-web-service-1/</link>
+      <pubDate>Tue, 24 Mar 2020 22:15:32 +0800</pubDate>
       
-      <guid>http://www.hiningmeng.cn/post/k8s-canal-binlog/</guid>
+      <guid>http://www.hiningmeng.cn/post/go-web-service-1/</guid>
       
-        <description>canal [kə&#39;næl]，译意为水道/管道/沟渠，是阿里巴巴开源的产品，主要用途是基于 MySQL 数据库增量日志解析，提供增量数据订阅和消费。 canal 1.1.14</description>
+        <description>准备Go环境 安装golang就不写了，这里使用到了gomod管理依赖包，需要Go的版本大于1.12,设置GOPATH和GOPROXY,并打开</description>
       
     </item>
     
